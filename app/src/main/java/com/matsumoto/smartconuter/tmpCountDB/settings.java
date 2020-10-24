@@ -1,19 +1,12 @@
-package com.matsumoto.smartconuter.CountDB;
+package com.matsumoto.smartconuter.tmpCountDB;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.matsumoto.smartconuter.Adapter;
+//import com.matsumoto.smartconuter.ListViews.Adapter;
 import com.matsumoto.smartconuter.R;
-
-import java.io.File;
 
 public class settings extends AppCompatActivity {
 
@@ -23,7 +16,7 @@ public class settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         ListView setting_list = (ListView)findViewById(R.id.set_list);
-        Adapter arrayAdapter=new Adapter(this);
+//        Adapter arrayAdapter=new Adapter(this);
 //        arrayAdapter.addRecords_data(new GeneralRecords("内容","時間"));
 //        arrayAdapter.addRecords_data();
     }

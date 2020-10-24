@@ -1,18 +1,15 @@
-package com.matsumoto.smartconuter;
+package com.matsumoto.smartconuter.tmpContentsSetting;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
+import com.matsumoto.smartconuter.MainActivity.GeneralRecords;
+import com.matsumoto.smartconuter.R;
+
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class Adapter extends BaseAdapter{
     Context context;

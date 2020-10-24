@@ -1,4 +1,4 @@
-package com.matsumoto.smartconuter;
+package com.matsumoto.smartconuter.MainActivity;
 
 import java.util.ArrayList;
 
