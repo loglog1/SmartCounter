@@ -1,17 +1,20 @@
-package com.matsumoto.smartconuter;
+package com.matsumoto.smartconuter.ListViews;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
-public class SettingAdapter extends BaseAdapter {
+import com.matsumoto.smartconuter.R;
+
+public class ContentsAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater = null;
     ContentsAndCount records_data = new ContentsAndCount();
 
-    public SettingAdapter(Context context) {
+    public ContentsAdapter(Context context) {
         this.context = context;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -37,9 +40,9 @@ public class SettingAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = layoutInflater.inflate(R.layout.activity_settings,parent,false);
+        convertView = layoutInflater.inflate(R.layout.timestamp_content,parent,false);
 
-//        ((TextView)convertView.findViewById().setText(String.valueOf(records_data.getTime(position)));
+        ((TextView)convertView.findViewById(R.id.price)).setText(String.valueOf(records_data.getTime(position)));
 
         return convertView;
     }

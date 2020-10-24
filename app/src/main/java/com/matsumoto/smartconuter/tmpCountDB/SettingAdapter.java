@@ -1,20 +1,20 @@
-package com.matsumoto.smartconuter;
+package com.matsumoto.smartconuter.tmpCountDB;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.matsumoto.smartconuter.ListViews.ContentsAndCount;
+import com.matsumoto.smartconuter.R;
 
-public class ContentsAdapter extends BaseAdapter {
+public class SettingAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater = null;
     ContentsAndCount records_data = new ContentsAndCount();
 
-    public ContentsAdapter(Context context) {
+    public SettingAdapter(Context context) {
         this.context = context;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -40,9 +40,9 @@ public class ContentsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = layoutInflater.inflate(R.layout.record_contents_main_activity,parent,false);
+        convertView = layoutInflater.inflate(R.layout.activity_settings,parent,false);
 
-        ((TextView)convertView.findViewById(R.id.price)).setText(String.valueOf(records_data.getTime(position)));
+//        ((TextView)convertView.findViewById().setText(String.valueOf(records_data.getTime(position)));
 
         return convertView;
     }
