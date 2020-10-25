@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +18,22 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.matsumoto.smartconuter.ControllDB;
 import com.matsumoto.smartconuter.R;
+import com.matsumoto.smartconuter.SettingModel.SettingActivity;
 
 import java.util.HashMap;
-import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
     private static Context instance = null;
     private static final int REQUEST_CODE_PICKER = 1;
     private static final int REQUEST_CODE_PERMISSION = 2;
     private MainAcitivtyViewModel viewModel;
-    private Widget widget;
+    private ContentsSettings contentsSettings;
+    public static Widget widget;
 
     public static int[] button_id={
             R.id.upper_left,
@@ -51,14 +54,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         public SparseArray<Integer> id_pare;
         public int window_width;
         public int window_height;
-//        public HashMap<Integer,Integer> id_pare=new HashMap<Integer, Integer>();
     }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if(!ActivityCompat.shouldShowRequestPermissionRationale(
                 this,  Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -72,39 +74,82 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
 
         instance = MainActivity.this;
-         widget = new Widget();
+        widget = new Widget();
         widget = setWidget(widget);
 
         viewModel = new MainAcitivtyViewModel(instance, button_id, widget);
         viewModel.onCreateViewModel(this.findViewById(R.id.setting_mode_switch).getRootView());
-        fixedButtonWidth();
-        ControllDB cdb = new ControllDB(MainActivity.this);
-        SQLiteDatabase db = cdb.getWritableDatabase();
-        try{
-            cdb.onCreate(db);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        contentsSettings = new ContentsSettings(this,button_id,widget);
+        fixButtonSize();
 
     }
 
     public void onClickContents(View view){
-        viewModel.onClickContents(view);
+        final Button button = view.findViewById(view.getId());
+        if (isSettingMode()) {
+            contentsSettings.drawSettingWindow(button);
+        } else {
+            viewModel.addCount(button);
+        }
     }
 
     public void onClickSettingButton(View view){
-        viewModel.onClickSettingButton(view);
+        Switch swt = view.findViewById(R.id.setting_mode_switch);
+        if(isSettingMode()){
+            swt.setText("設定モード");
+            this.changeButtonColor(true);
+        }else{
+            swt.setText("記録モード");
+            this.changeButtonColor(false);
+        }
+    }
+
+    public void changeButtonColor(Boolean is_setting_mode_) {
+        final String RED = "ffaaaa";
+        final String BLUE = "9bdeff";
+        final String GREEN = "b0ffb0";
+
+        if(is_setting_mode_) {
+            widget.contents.get("upper_left").setBackgroundColor(Color.parseColor("#AA" + RED));
+            widget.contents.get("upper_center").setBackgroundColor(Color.parseColor("#AA" + RED));
+            widget.contents.get("upper_right").setBackgroundColor(Color.parseColor("#AA" + RED));
+
+            widget.contents.get("center_left").setBackgroundColor(Color.parseColor("#AA" + BLUE));
+            widget.contents.get("center_center").setBackgroundColor(Color.parseColor("#AA" + BLUE));
+            widget.contents.get("center_right").setBackgroundColor(Color.parseColor("#AA" + BLUE));
+
+            widget.contents.get("lower_left").setBackgroundColor(Color.parseColor("#AA" + GREEN));
+            widget.contents.get("lower_center").setBackgroundColor(Color.parseColor("#AA" + GREEN));
+            widget.contents.get("lower_right").setBackgroundColor(Color.parseColor("#AA" + GREEN));
+        }else{
+            widget.contents.get("upper_left").setBackgroundColor(Color.parseColor("#" + RED));
+            widget.contents.get("upper_center").setBackgroundColor(Color.parseColor("#" + RED));
+            widget.contents.get("upper_right").setBackgroundColor(Color.parseColor("#" + RED));
+
+            widget.contents.get("center_left").setBackgroundColor(Color.parseColor("#" + BLUE));
+            widget.contents.get("center_center").setBackgroundColor(Color.parseColor("#" + BLUE));
+            widget.contents.get("center_right").setBackgroundColor(Color.parseColor("#" + BLUE));
+
+            widget.contents.get("lower_left").setBackgroundColor(Color.parseColor("#" + GREEN));
+            widget.contents.get("lower_center").setBackgroundColor(Color.parseColor("#" + GREEN));
+            widget.contents.get("lower_right").setBackgroundColor(Color.parseColor("#" + GREEN));
+
+        }
     }
 
     public void toWholeSettings(final View view){
-//        Intent intent = new Intent(this, RecordsList.class);
-//        startActivities(intent);
+        Intent intent = new Intent(instance,SettingActivity.class);
+        instance.startActivity(intent);
+    }
+
+    public Boolean isSettingMode() {
+        return widget.swt.isChecked();
     }
 
     private Widget setWidget(Widget widget){
         widget.swt = (Switch)findViewById(R.id.setting_mode_switch);
         widget.setting=(Button)findViewById(R.id.whole_settings);
-        widget.contents = new HashMap<String,Button>();
+        widget.contents = new HashMap<>();
         widget.contents.put( "upper_left",(Button)findViewById(R.id.upper_left) );
         widget.contents.put( "upper_center",(Button)findViewById(R.id.upper_center) );
         widget.contents.put( "upper_right",(Button)findViewById(R.id.upper_right) );
@@ -125,22 +170,26 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         return widget;
     }
 
-    private void fixedButtonWidth(){
+    private void fixButtonSize(){
+
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.wrap_buttons);
+        int layout_height = linearLayout.getHeight();
+
         int each_width = (int)(this.widget.window_width/3.);
+        int each_height = (int)(layout_height/3.);
 
         for(int id:button_id){
             Button btn = findViewById(id);
             btn.setWidth(each_width);
+            btn.setHeight(each_height);
         }
     }
 
     //    Preferenceを使って表示するデータのDBのIDを取得する。
     //    存在しなければDBのIDは-1
     private SparseArray<Integer> getBtnidDBidPair(){
-//    private HashMap<Integer,Integer> getBtnidDBidPair(){
-//        HashMap<Integer,Integer> map=new HashMap<Integer, Integer>();
         SparseArray<Integer> map=new SparseArray<Integer>();
-        SharedPreferences pref = getSharedPreferences("idpair.txt",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("idpair",MODE_PRIVATE);
         for(Integer btn_id:button_id){
             Integer db_id = pref.getInt(btn_id.toString(),-1);
             Log.d("aaa", "getBtnidDBidPair: "+btn_id.toString()+","+db_id.toString());
@@ -150,13 +199,17 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     @Override
-    public void onStop(){
-        SharedPreferences pref = getSharedPreferences("idpair.txt",MODE_PRIVATE);
+    public void onPause(){
+        SharedPreferences pref = getSharedPreferences("idpair",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         for(Integer btn_id:button_id){
             editor.putInt(btn_id.toString(),widget.id_pare.get(btn_id));
         }
         editor.apply();
+        super.onPause();
+    }
+    @Override
+    public void onStop(){
         super.onStop();
     }
 }

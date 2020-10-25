@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import static android.content.ContentValues.TAG;
 
 public class ContentsSettings {
-    private Context MainActivity_Context = null;
+    private Context MainActivity_Context;
     private int[] buttons_id;
     private MainActivity.Widget widget;
     private ControllDB control_db;
@@ -116,13 +116,13 @@ public class ContentsSettings {
 
                         if(db_id==-1){
                             //未設定からの変更
-                            SpannableStringBuilder sb = transformStrings(new_name,"0");
+                            SpannableStringBuilder sb = TransformStringDesign.transformStrings(new_name,"0");
                             selected_btn.setText(sb);
                             db_id = control_db.insertNewContent(new_name);
                             widget.id_pare.put(selected_btn.getId(),db_id);
                         }else{
                             String count = control_db.getTimStampCount(db_id);
-                            SpannableStringBuilder sb = transformStrings(new_name,count);
+                            SpannableStringBuilder sb = TransformStringDesign.transformStrings(new_name,count);
                             selected_btn.setText(sb);
                             control_db.changeTitle(db_id, new_name);
                         }
@@ -148,7 +148,7 @@ public class ContentsSettings {
                     public void onClick(DialogInterface dialog, int id) {
                         int db_id = widget.id_pare.get(selected_btn_.getId());
                         control_db.changeNegativeMode(db_id);
-                        SpannableStringBuilder btn_text = transformStrings(
+                        SpannableStringBuilder btn_text = TransformStringDesign.transformStrings(
                                 MainActivity_Context.getString(R.string.no_data),
                                 "0"
                         );
@@ -211,7 +211,7 @@ public class ContentsSettings {
                     public void onClick(DialogInterface dialog, int id) {
                     int db_id = widget.id_pare.get(selected_btn_.getId());
                     control_db.deleteContents(db_id);
-                    SpannableStringBuilder sb = transformStrings(
+                    SpannableStringBuilder sb = TransformStringDesign.transformStrings(
                                 MainActivity_Context.getString(R.string.no_data),"0");
                     selected_btn_.setText(sb);
 //                    ボタンのdb_idも未設定状態にする
@@ -221,25 +221,6 @@ public class ContentsSettings {
                 .setCancelable(true);
 
         builder.show();
-    }
-
-    private SpannableStringBuilder transformStrings (String theme, String count){
-        String alt_theme="";
-        if(theme.length()>5){
-            alt_theme = theme.substring(0,5)+"...";
-            Log.d(TAG, "transformStrings: "+alt_theme);
-        }else{
-            alt_theme = theme;
-        }
-        SpannableStringBuilder sb = new SpannableStringBuilder();
-        sb.append(alt_theme);
-        sb.setSpan(new RelativeSizeSpan(2.5f), 0, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sb.append("\n");
-        sb.append("\n");
-        int start = sb.length();
-        sb.append(count + "回");
-        sb.setSpan(new RelativeSizeSpan(2.0f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return sb;
     }
 
 }

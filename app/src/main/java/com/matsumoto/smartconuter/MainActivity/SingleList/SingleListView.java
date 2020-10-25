@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.matsumoto.smartconuter.MainActivity.TimestampList.TimestampContent;
-import com.matsumoto.smartconuter.MainActivity.TimestampList.TimestampListAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 

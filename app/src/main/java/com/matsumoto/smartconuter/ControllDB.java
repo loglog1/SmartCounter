@@ -31,9 +31,10 @@ public class ControllDB extends SQLiteOpenHelper {
             db.execSQL(SQL_CREATE_ENTRY);
             SQL_CREATE_ENTRY = "create table if not exists record_count(_id integer, time TIMESTAMP, foreign key(_id) references content_name);";
             db.execSQL(SQL_CREATE_ENTRY);
-
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            db.close();
         }
     }
 
@@ -68,6 +69,8 @@ public class ControllDB extends SQLiteOpenHelper {
             cursor.close();
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            db.close();
         }
         return id;
     }
@@ -99,7 +102,7 @@ public class ControllDB extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
 
-        String query = "update into content_name values("+id.toString()+",'"+name_+"')";
+        String query = "update content_name set _id="+id.toString()+",name_='"+name_+"', where _id="+id.toString()+")";
         try{
             db.execSQL(query);
         }catch (Exception e){
@@ -127,6 +130,8 @@ public class ControllDB extends SQLiteOpenHelper {
 
         }catch(Exception e){
             e.printStackTrace();
+        }finally {
+            db.close();
         }
         return count;
     }
@@ -214,7 +219,7 @@ public class ControllDB extends SQLiteOpenHelper {
     public ArrayList<Pair<String, String>> getAllTimestamp() {
         SQLiteDatabase db = getReadableDatabase();
         String query = "select name, time " +
-                "from content_type, record_count " +
+                "from content_name, record_count " +
                 "order by (time)";
 
         ArrayList<Pair<String,String>> result = new ArrayList<Pair<String,String>>();
@@ -229,6 +234,8 @@ public class ControllDB extends SQLiteOpenHelper {
             cursor.close();
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            db.close();
         }
         return result;
     }
@@ -288,11 +295,15 @@ public class ControllDB extends SQLiteOpenHelper {
 
     public void deleteAll(){
         SQLiteDatabase db = getWritableDatabase();
-        String SQL_DELETE_ENTRIES = "drop table content_type if exists;";
-        SQL_DELETE_ENTRIES += "drop table limited_status if exists;";
-        SQL_DELETE_ENTRIES += "drop table record_count if exists;";
-        SQL_DELETE_ENTRIES += "drop table content_name if exists;";
+
         try{
+            String SQL_DELETE_ENTRIES = "drop table if exists content_type;";
+            db.execSQL(SQL_DELETE_ENTRIES);
+            SQL_DELETE_ENTRIES += "drop table if exists limited_status;";
+            db.execSQL(SQL_DELETE_ENTRIES);
+            SQL_DELETE_ENTRIES += "drop table if exists record_count;";
+            db.execSQL(SQL_DELETE_ENTRIES);
+            SQL_DELETE_ENTRIES += "drop table if exists content_name;";
             db.execSQL(SQL_DELETE_ENTRIES);
             onCreate(db);
         }catch (Exception e){
