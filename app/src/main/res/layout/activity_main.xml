@@ -6,12 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity.MainActivity"
     android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            >
+            <ImageButton
+                android:id="@+id/alllist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/ic_list_black_24dp"
+                android:onClick="toAllList"
+                />
+            <ImageButton
+                android:foregroundGravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/ic_settings_black_24dp"
+                android:onClick="toWholeSettings"
+                />
+            <Switch
+                android:id="@+id/setting_mode_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingHorizontal="10dp"
+                android:onClick="onClickSettingButton"
+                android:text="設定モード"
+                />
 
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <DigitalClock
             android:id="@+id/clock"
             android:layout_width="match_parent"
@@ -30,24 +76,7 @@
                 android:orientation="horizontal"
                 >
 
-                <Switch
-                    android:id="@+id/setting_mode_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:onClick="onClickSettingButton"
-                    android:paddingRight="0px"
-                    android:text="記録モード"
-                    />
-                <Button
-                    android:id="@+id/whole_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:onClick="toWholeSettings"
-                    android:text="設定"
-                    android:textColor="#555555" />
+
 
             </LinearLayout>
 
@@ -188,11 +217,5 @@
         </LinearLayout>
 
         </LinearLayout>
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

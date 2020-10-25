@@ -27,10 +27,10 @@ public class SingleListAdapter extends ArrayAdapter<SingleContent> {
 
 //        // レイアウトが初めて作成される場合のみ作成
         if(null == convertView){
-            convertView = layoutinflater.inflate(R.layout.timestamp_content, null);
+            convertView = layoutinflater.inflate(R.layout.single_content, null);
         }
 
-        TextView text2 = (TextView)convertView.findViewById(R.id.timestamp);
+        TextView text2 = (TextView)convertView.findViewById(R.id.content);
         text2.setText(detail.getContent());
 //
         return convertView;

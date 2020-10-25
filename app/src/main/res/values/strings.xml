@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartConuter</string>
+    <string name="app_name">SmartCounter</string>
     <string name="no_data">未設定</string>
     <string name="title_activity_settings">Settings</string>
 
